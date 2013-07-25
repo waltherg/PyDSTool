@@ -80,6 +80,7 @@ class ContClass(Utility):
 
     def __getitem__(self, name):
         try:
+            print 'curves',self.curves
             return self.curves[name]
         except:
             raise KeyError('No curve named ' + str(name))
@@ -683,8 +684,8 @@ void jacobianParam(unsigned n_, unsigned np_, double t, double *Y_, double *p_, 
                   ext_modules = [Extension("_auto"+self._vf_filename_ext,
                                  sources=modfilelist,
                                  include_dirs=incdirs,
-                                 extra_compile_args=['-w', '-D__PYTHON__', '-std=c99', '-m32'],
-                                 extra_link_args=['-w', '-m32'],
+                                 extra_compile_args=['-w', '-D__PYTHON__', '-std=c99'],
+                                 extra_link_args=['-w'],
                                  library_dirs=libdirs+['./'],
                                  libraries=libsources)])
         except:
