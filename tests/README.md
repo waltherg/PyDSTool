@@ -4,6 +4,14 @@ Apart from [modifications](https://github.com/waltherg/PyDSTool/commits/fix-pyco
 I needed to apply to the source code -- see log of this branch -- 
 these are the additional steps I needed to take to get this example to run.
 
+Packages I installed for `PyDSTool`:
+
+```bash
+matplotlib==1.2.1
+numpy==1.7.1
+scipy==0.12.0
+```
+
 # PyCont_vanDerPol.py
 
 ## pyconfig-32.h
