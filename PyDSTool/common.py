@@ -2363,7 +2363,7 @@ class KroghInterpolator(object):
             while s<=k and xi[k-s]==xi[k]:
                 s += 1
             s -= 1
-            Vk[0] = yi[k]/float(spy.factorial(s))
+            Vk[0] = yi[k]/float(spy.misc.factorial(s))
             for i in xrange(k-s):
                 assert xi[i]!=xi[k]
                 if s==0:
