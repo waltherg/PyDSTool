@@ -435,7 +435,8 @@ class FuncSpec(object):
         if protected_overlap != []:
             print "Overlapping names:", protected_overlap
             raise ValueError('Variable, parameter, and input names must not '
-                         'overlap with protected math / aux function names')
+                         'overlap with protected math / aux function names. '
+                         'Protected names you used:',protected_overlap)
         ## Not yet implemented ?
         # verify that targetlang is consistent with spec contents?
         # verify that spec is consistent with specstring (if not empty)?
