@@ -1319,7 +1319,7 @@ class Continuation(object):
             sol0 = sol[0]
 
             # Type of end point
-            etype = sol0.labels.has_key('P') and 'P' or 'MX'
+            etype = sol0.labels.has_key('EP') and 'EP' or 'MX'
 
             if etype in sol0.labels:
                 sol0.labels[etype]['name'] = etype+'1'
