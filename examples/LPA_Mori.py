@@ -51,7 +51,7 @@ system.varspecs = varspecs
 system.ics = ics
 # Some tutorials ask you to set system.tdomain in this version of PyDSTool
 # dst.args.tdomain does not exist anymore and needs to be replaced with
-# dst.args.data
+# dst.args.tdata
 system.tdata = [0.0, t_final]
 
 ## Integrate ODE System
@@ -70,21 +70,43 @@ pl.draw()
 ode.set(ics = {'uL': data['uL'][-1], 'uG': data['uG'][-1]})
 cont = dst.ContClass(ode)
 
-# EP-C: Equilibrium Point Curve
+## Continuation
+# Our initial conditions for the above integration were chosen so that
+# the in the steady state uL > uG (i.e. the system is said to be perturbable).
+# Below we will first continue this heterogeneous (uL != uG) branch
+
+# note: EP-C: Equilibrium Point Curve
 cont_args = dst.args(name='equilibrium 1', type='EP-C')
 cont_args.freepars = ['T']
-cont_args.MaxNumPoints = 100
-cont_args.MaxStepSize = .1
-cont_args.MinStepSize = 1e-5
-cont_args.StepSize = 1e-2
-cont_args.LocBifPoints = 'LP'
+cont_args.MaxNumPoints = 1000
+cont_args.MaxStepSize = .01
+cont_args.MinStepSize = 1e-6
+cont_args.StepSize = 1e-3
+cont_args.LocBifPoints = ['LP', 'BP']
 cont_args.SaveEigen = True
+# set parameter domain for each parameter
+cont_args.pdomain = {'T': [0.0, 4.0]}
+# increase verbosity to see what Continuation is doing
+cont_args.verbosity = 1
 
 cont.newCurve(cont_args)
 cont['equilibrium 1'].forward()
 cont['equilibrium 1'].backward()
-pl.figure()
+
+# Now, choose one of the branch points on the curve we computed above
+# and switch to the homogeneous branch (uL == uG)
+cont_args.name = 'equilibrium 2'
+cont_args.initpoint = 'equilibrium 1:BP1'
+cont_args.initdirec = cont['equilibrium 1'].getSpecialPoint('BP2').\
+    labels['BP']['data'].branch
+cont_args.LocBifPoints = ['BP']
+cont.newCurve(cont_args)
+cont['equilibrium 2'].forward()
+cont['equilibrium 2'].backward()
+
+pl.figure(frameon=False)
 cont.display(['T','uL'], stability=True)
+pl.savefig('LPA_Mori_constant_tau_constant_domain_length.pdf', bbox_inces=0)
 
 ## Keep Pylab / Matplotlib plots open until user closes them
-pl.show()
+#pl.show()
