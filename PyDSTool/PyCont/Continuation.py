@@ -59,7 +59,7 @@ cont_args_list = ['name','force','freepars','MaxNumPoints','MaxCorrIters',
                   'VarTol','FuncTol','TestTol', 'description', 'uservars',
                   'LocBifPoints','verbosity','ClosedCurve','SaveJacobian',
                   'SaveEigen', 'Corrector', 'UseAuto', 'StopAtPoints',
-                  'SPOut']
+                  'SPOut','pdomain']
 
 cont_bif_points = ['BP', 'B', 'SP']
 
@@ -1050,7 +1050,10 @@ class Continuation(object):
 
         # de-references to improve efficiency
         loc = self.loc  # integer, so self.loc won't get updated automatically
-        while loc+1 < self.MaxNumPoints and not stop:
+        pdomains = [self.pdomain[key] for key in self.pdomain.keys()]
+        while loc+1 < self.MaxNumPoints and not stop and \
+                all([curve[loc][-1] >= pdomain[0] and \
+                        curve[loc][-1] <= pdomain[1] for pdomain in pdomains]):
             # Predictor
             loc += 1
             curve[loc] = curve[loc-1] + self.StepSize*V[loc-1]
